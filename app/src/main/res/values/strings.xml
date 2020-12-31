@@ -2,7 +2,7 @@
     <string name="app_name">Java Phone Number Authentication</string>
 
     <string name="country_promt">Choose a country</string>
-    <string-array name="country_code_promt">+0</string-array>
+    <string-array name="country_code_promt">+880</string-array>
     
     <string-array name="country_names">
         <item>Bangladesh</item>
