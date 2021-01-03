@@ -1,5 +1,6 @@
 package com.imran.android.javaphonenumberauthentication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -60,11 +61,8 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
         String phoneNumber = editTextCountryCode.getText().toString() + editTextNumber.getText().toString();
 
-        startPhoneNumberVerification(phoneNumber);
-    }
-
-    private void startPhoneNumberVerification(String phoneNumber) {
-        
+        Intent verfificationIntent = new Intent(this, VerificationActivity.class);
+        startActivity(verfificationIntent);
     }
 
     @Override
