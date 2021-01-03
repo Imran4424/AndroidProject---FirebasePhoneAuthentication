@@ -63,6 +63,10 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         startPhoneNumberVerification(phoneNumber);
     }
 
+    private void startPhoneNumberVerification(String phoneNumber) {
+        
+    }
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         editTextCountryCode.setText(countryCodesList.get(position));
