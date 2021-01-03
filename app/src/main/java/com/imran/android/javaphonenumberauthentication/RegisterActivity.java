@@ -9,13 +9,15 @@ import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private Spinner spinnerCountry;
     private EditText editTextCountryCode;
     private EditText editTextNumber;
-    private List<String> countryCodesList;
+    private List<String> countryCodesList = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +27,8 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         spinnerCountry = findViewById(R.id.spinnerCountry);
         editTextCountryCode = findViewById(R.id.editTextCountryCode);
         editTextNumber = findViewById(R.id.editTextCode);
+
+        countryCodesList = Arrays.asList(getResources().getStringArray(R.array.country_code));
 
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(
                 this,
@@ -42,7 +46,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        
+        editTextCountryCode.setText(countryCodesList.get(position));
     }
 
     @Override
