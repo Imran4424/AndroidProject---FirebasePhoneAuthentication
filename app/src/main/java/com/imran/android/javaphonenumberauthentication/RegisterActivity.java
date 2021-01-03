@@ -24,6 +24,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         setContentView(R.layout.activity_register);
 
         spinnerCountry = findViewById(R.id.spinnerCountry);
+        // this is really important
         spinnerCountry.setOnItemSelectedListener(this);
 
         editTextCountryCode = findViewById(R.id.editTextCountryCode);
@@ -42,8 +43,24 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 //        spinnerCountry.setAdapter(spinnerAdapter);
     }
 
-    public void actionNext(View view) {
+    private boolean validatePhoneNumber() {
+        String enteredNumber = editTextNumber.getText().toString();
 
+        if (enteredNumber.isEmpty()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public void actionNext(View view) {
+        if (!validatePhoneNumber()) {
+            return;
+        }
+
+        String phoneNumber = editTextCountryCode.getText().toString() + editTextNumber.getText().toString();
+
+        startPhoneNumberVerification(phoneNumber);
     }
 
     @Override
