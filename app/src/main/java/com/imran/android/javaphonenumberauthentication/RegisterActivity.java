@@ -24,13 +24,14 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         setContentView(R.layout.activity_register);
 
         spinnerCountry = findViewById(R.id.spinnerCountry);
+        spinnerCountry.setOnItemSelectedListener(this);
+
         editTextCountryCode = findViewById(R.id.editTextCountryCode);
         editTextNumber = findViewById(R.id.editTextCode);
 
         countryCodesList = Arrays.asList(getResources().getStringArray(R.array.country_code));
-        spinnerCountry.setOnItemSelectedListener(this);
 
-        // the following code works too
+        //   the following code works too
 //        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(
 //                this,
 //                R.array.country_names,
