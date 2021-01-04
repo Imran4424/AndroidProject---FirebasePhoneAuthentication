@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+    private final String NUMBER_EXTRA = "NUMBER_EXTRA";
     private Spinner spinnerCountry;
     private EditText editTextCountryCode;
     private EditText editTextNumber;
@@ -61,8 +62,9 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
 
         String phoneNumber = editTextCountryCode.getText().toString() + editTextNumber.getText().toString();
 
-        Intent verfificationIntent = new Intent(this, VerificationActivity.class);
-        startActivity(verfificationIntent);
+        Intent verificationIntent = new Intent(this, VerificationActivity.class);
+        verificationIntent.putExtra(NUMBER_EXTRA, phoneNumber);
+        startActivity(verificationIntent);
     }
 
     @Override
