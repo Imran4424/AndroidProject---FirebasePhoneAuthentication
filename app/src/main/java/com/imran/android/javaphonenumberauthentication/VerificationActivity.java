@@ -75,6 +75,15 @@ public class VerificationActivity extends AppCompatActivity {
     };
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        
+        if (verificationInProgress) {
+            startPhoneNumberVerification(numberFromIntent);
+        }
+    }
+
+    @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(KEY_VERIFY_IN_PROGRESS, verificationInProgress);
