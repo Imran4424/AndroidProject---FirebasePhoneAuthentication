@@ -49,6 +49,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         String enteredNumber = editTextNumber.getText().toString();
 
         if (enteredNumber.isEmpty()) {
+            editTextNumber.setError("Invalid Phone Number");
             return false;
         }
 

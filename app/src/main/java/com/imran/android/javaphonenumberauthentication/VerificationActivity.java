@@ -36,6 +36,11 @@ public class VerificationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verification);
 
+        // restore instance state
+        if (savedInstanceState != null) {
+            onRestoreInstanceState(savedInstanceState);
+        }
+
         numberInVerification = findViewById(R.id.textNumberVerificaion);
         editTextCode = findViewById(R.id.editTextCode);
         
@@ -68,6 +73,18 @@ public class VerificationActivity extends AppCompatActivity {
 
         }
     };
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(KEY_VERIFY_IN_PROGRESS, verificationInProgress);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        verificationInProgress = savedInstanceState.getBoolean(KEY_VERIFY_IN_PROGRESS);
+    }
 
     // Get the text code sent so user can use it for sign in
     private void startPhoneNumberVerification(String numberFromIntent) {
