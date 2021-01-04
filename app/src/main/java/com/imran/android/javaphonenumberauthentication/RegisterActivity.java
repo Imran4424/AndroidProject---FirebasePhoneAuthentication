@@ -30,7 +30,7 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         spinnerCountry.setOnItemSelectedListener(this);
 
         editTextCountryCode = findViewById(R.id.editTextCountryCode);
-        editTextNumber = findViewById(R.id.editTextCode);
+        editTextNumber = findViewById(R.id.editTextNumberRegister);
 
         countryCodesList = Arrays.asList(getResources().getStringArray(R.array.country_code));
 

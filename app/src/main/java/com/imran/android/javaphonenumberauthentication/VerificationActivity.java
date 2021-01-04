@@ -22,10 +22,16 @@ public class VerificationActivity extends AppCompatActivity {
         numberInVerification = findViewById(R.id.textNumberVerificaion);
         editTextCode = findViewById(R.id.editTextCode);
 
-//        if (savedInstanceState == null) {
-//            numberFromIntent = getIntent().getStringExtra(NUMBER_EXTRA);
-//            numberInVerification.setText(numberFromIntent);
-//        }
+        if (savedInstanceState == null) {
+            numberFromIntent = getIntent().getStringExtra(NUMBER_EXTRA);
+            numberInVerification.setText(numberFromIntent);
+
+            startPhoneNumberVerification(numberFromIntent);
+        }
+    }
+
+    private void startPhoneNumberVerification(String numberFromIntent) {
+    
     }
 
     public void actionWrongNumber(View view) {
