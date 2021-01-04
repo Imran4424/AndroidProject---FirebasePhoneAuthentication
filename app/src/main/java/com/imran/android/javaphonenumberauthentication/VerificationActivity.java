@@ -21,10 +21,13 @@ import java.util.concurrent.TimeUnit;
 public class VerificationActivity extends AppCompatActivity {
     private static final String TAG = "PhoneAuthActivity";
     private final String NUMBER_EXTRA = "NUMBER_EXTRA";
+    private static final String KEY_VERIFY_IN_PROGRESS = "key_verify_in_progress";
+
 
     private TextView numberInVerification;
     private EditText editTextCode;
     private String numberFromIntent;
+    private Boolean verificationInProgress = false;
     
     private FirebaseAuth firebaseAuth;
 
@@ -76,6 +79,7 @@ public class VerificationActivity extends AppCompatActivity {
                 .build();
 
         PhoneAuthProvider.verifyPhoneNumber(phoneAuthOptions);
+        verificationInProgress = true;
     }
 
     public void actionWrongNumber(View view) {
