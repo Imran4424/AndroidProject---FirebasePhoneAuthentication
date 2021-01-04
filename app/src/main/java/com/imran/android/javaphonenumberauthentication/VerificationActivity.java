@@ -10,8 +10,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseException;
+import com.google.firebase.FirebaseTooManyRequestsException;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
@@ -27,8 +33,12 @@ public class VerificationActivity extends AppCompatActivity {
     private TextView numberInVerification;
     private EditText editTextCode;
     private String numberFromIntent;
+
     private Boolean verificationInProgress = false;
-    
+    private String currentVerificationId;
+    private PhoneAuthProvider.ForceResendingToken currentForceResendingToken;
+    private boolean verificationCompleted = false;
+
     private FirebaseAuth firebaseAuth;
 
     @Override
@@ -51,6 +61,12 @@ public class VerificationActivity extends AppCompatActivity {
             numberInVerification.setText(numberFromIntent);
 
             startPhoneNumberVerification(numberFromIntent);
+            String code = editTextCode.getText().toString();
+            if (code.isEmpty()) {
+                editTextCode.setError("Can not be empty");
+            } else {
+                verifyPhoneNumberWithCode(currentVerificationId, code);
+            }
         }
     }
 
@@ -64,20 +80,76 @@ public class VerificationActivity extends AppCompatActivity {
             //     detect the incoming verification SMS and perform verification without
             //     user action.
             Log.d(TAG, "onVerificationCompleted:" + phoneAuthCredential);
-
-            //signInWithPhoneAuthCredential(credential);
+            verificationInProgress = false;
+            signInWithPhoneAuthCredential(phoneAuthCredential);
         }
 
         @Override
         public void onVerificationFailed(@NonNull FirebaseException e) {
+            // This callback is invoked in an invalid request for verification is made,
+            // for instance if the the phone number format is not valid.
+            Log.w(TAG, "onVerificationFailed", e);
+            verificationInProgress = false;
 
+            if (e instanceof FirebaseAuthInvalidCredentialsException) {
+                // Invalid request
+                Log.e(TAG, "Invalid phone number");
+            } else if (e instanceof FirebaseTooManyRequestsException) {
+                // The SMS quota for the project has been exceeded
+                Snackbar.make(findViewById(android.R.id.content), "Quota exceeded.",
+                        Snackbar.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void onCodeSent(@NonNull String verificationId, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+            // The SMS verification code has been sent to the provided phone number, we
+            // now need to ask the user to enter the code and then construct a credential
+            // by combining the code with a verification ID.
+            Log.d(TAG, "onCodeSent:" + verificationId);
+
+           currentVerificationId = verificationId;
+           currentForceResendingToken = forceResendingToken;
         }
     };
+
+    // Use text to sign in
+    private void signInWithPhoneAuthCredential(PhoneAuthCredential phoneAuthCredential) {
+        firebaseAuth.signInWithCredential(phoneAuthCredential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithCredential:success");
+
+//                            Intent signedInIntent = new Intent(VerificationActivity.this, SignedInActivity.class);
+//                            signedInIntent.putExtra(NUMBER_EXTRA, numberFromIntent);
+//                            startActivity(signedInIntent);
+
+                            verificationCompleted = true;
+                        } else {
+                            // Sign in failed, display a message and update the UI
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                                // The verification code entered was invalid
+                                editTextCode.setError("Invalid Code");
+                            }
+                        }
+                    }
+                });
+    }
+
+    // entered code to manually for log in (code from text)
+    private void verifyPhoneNumberWithCode(String verificationId, String code) {
+        PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.getCredential(verificationId, code);
+        signInWithPhoneAuthCredential(phoneAuthCredential);
+    }
 
     @Override
     protected void onStart() {
         super.onStart();
-        
+
         if (verificationInProgress) {
             startPhoneNumberVerification(numberFromIntent);
         }
