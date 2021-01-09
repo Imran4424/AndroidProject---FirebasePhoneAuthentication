@@ -7,43 +7,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:731266467198:android:6d92d7d4abca09daf55f2f",
-        "android_client_info": {
-          "package_name": "academy.learnprogramming"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "731266467198-gpiive40u2n3t5gr9d6gtnch36ts2lop.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "academy.learnprogramming",
-            "certificate_hash": "a82d8b4f77e082de97985d691ad4ba18807f482e"
-          }
-        },
-        {
-          "client_id": "731266467198-meorm71s6ejhs4hsq3glomq40ntuieqq.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAGymdvYy-O7JBbf_ijUsWh5zRjRrWvEJc"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "731266467198-meorm71s6ejhs4hsq3glomq40ntuieqq.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:731266467198:android:eccf4649d91a7ceaf55f2f",
         "android_client_info": {
           "package_name": "com.imran.android.java_firebaseemailauthenticationsdk"
@@ -118,7 +81,7 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:731266467198:android:90ace68640fff13df55f2f",
+        "mobilesdk_app_id": "1:731266467198:android:ec8362c9ba0810f4f55f2f",
         "android_client_info": {
           "package_name": "com.imran.android.javaphonenumberauthentication"
         }
