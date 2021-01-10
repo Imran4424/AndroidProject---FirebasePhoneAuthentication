@@ -48,7 +48,6 @@ public class VerificationActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private PhoneAuthProvider.ForceResendingToken currentForceResendingToken;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks onVerificationStateChangedCallbacks;
-//    private ActivityPhoneAuthBinding activityPhoneAuthBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,7 +199,7 @@ public class VerificationActivity extends AppCompatActivity {
                         .setCallbacks(onVerificationStateChangedCallbacks)          // OnVerificationStateChangedCallbacks
                         .setForceResendingToken(token)     // ForceResendingToken from callbacks
                         .build();
-        
+
         PhoneAuthProvider.verifyPhoneNumber(options);
     }
 
