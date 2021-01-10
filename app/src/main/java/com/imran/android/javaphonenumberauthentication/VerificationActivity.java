@@ -29,6 +29,13 @@ public class VerificationActivity extends AppCompatActivity {
     private final String NUMBER_EXTRA = "NUMBER_EXTRA";
     private static final String KEY_VERIFY_IN_PROGRESS = "key_verify_in_progress";
 
+    private static final int STATE_INITIALIZED = 1;
+    private static final int STATE_CODE_SENT = 2;
+    private static final int STATE_VERIFY_FAILED = 3;
+    private static final int STATE_VERIFY_SUCCESS = 4;
+    private static final int STATE_SIGNIN_FAILED = 5;
+    private static final int STATE_SIGNIN_SUCCESS = 6;
+
 
     private TextView numberInVerification;
     private EditText editTextCode;
@@ -36,11 +43,12 @@ public class VerificationActivity extends AppCompatActivity {
 
     private Boolean verificationInProgress = false;
     private String currentVerificationId;
-    private PhoneAuthProvider.ForceResendingToken currentForceResendingToken;
     private boolean verificationCompleted = false;
 
     private FirebaseAuth firebaseAuth;
+    private PhoneAuthProvider.ForceResendingToken currentForceResendingToken;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks onVerificationStateChangedCallbacks;
+//    private ActivityPhoneAuthBinding activityPhoneAuthBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +123,26 @@ public class VerificationActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
 
+        if (verificationInProgress) {
+            startPhoneNumberVerification(numberFromIntent);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(KEY_VERIFY_IN_PROGRESS, verificationInProgress);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        verificationInProgress = savedInstanceState.getBoolean(KEY_VERIFY_IN_PROGRESS);
+    }
 
     // Use text to sign in
     private void signInWithPhoneAuthCredential(PhoneAuthCredential phoneAuthCredential) {
@@ -144,27 +171,6 @@ public class VerificationActivity extends AppCompatActivity {
                 });
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        if (verificationInProgress) {
-            startPhoneNumberVerification(numberFromIntent);
-        }
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(KEY_VERIFY_IN_PROGRESS, verificationInProgress);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        verificationInProgress = savedInstanceState.getBoolean(KEY_VERIFY_IN_PROGRESS);
-    }
-
     // entered code to manually for log in (code from text)
     private void verifyPhoneNumberWithCode(String verificationId, String code) {
         PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.getCredential(verificationId, code);
@@ -176,7 +182,7 @@ public class VerificationActivity extends AppCompatActivity {
         PhoneAuthOptions phoneAuthOptions = PhoneAuthOptions.newBuilder(firebaseAuth)
                 .setPhoneNumber(numberFromIntent)
                 .setTimeout(60L, TimeUnit.SECONDS)
-                .setActivity(this)
+                .setActivity(VerificationActivity.this)
                 .setCallbacks(onVerificationStateChangedCallbacks)
                 .build();
 
@@ -190,10 +196,11 @@ public class VerificationActivity extends AppCompatActivity {
                 PhoneAuthOptions.newBuilder(firebaseAuth)
                         .setPhoneNumber(phoneNumber)       // Phone number to verify
                         .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-                        .setActivity(this)                 // Activity (for callback binding)
+                        .setActivity(VerificationActivity.this)                 // Activity (for callback binding)
                         .setCallbacks(onVerificationStateChangedCallbacks)          // OnVerificationStateChangedCallbacks
                         .setForceResendingToken(token)     // ForceResendingToken from callbacks
                         .build();
+        
         PhoneAuthProvider.verifyPhoneNumber(options);
     }
 
